@@ -1,0 +1,39 @@
+// ----------------------------------------------------------------------
+// Generated 1/21/2019 from 'WebProject_1.spcap'
+// by Silk Performer Recorder v19.5.0.8160
+// ----------------------------------------------------------------------
+//  * Rule "Excluding browser-specific domains"
+// Excluding proprietary TCP/IP traffic
+// Excluding UDP traffic
+// Rule set "ASP.NET ViewState"
+//  * Rule "Parse and Replace __VIEWSTATE"
+//  * Rule "Parse and Replace __EVENTVALIDATION"
+// ----------------------------------------------------------------------
+
+@codepage(1252)
+
+benchmark SilkPerformerRecorder
+
+use "Kernel.bdh"
+
+dcluser
+  user
+    VUser
+  transactions
+    TInit           : begin;
+    TMain           : 1;
+
+var
+
+dclrand
+
+dcltrans
+  transaction TInit
+  begin
+  end TInit;
+
+  transaction TMain
+  var
+  begin
+  end TMain;
+
