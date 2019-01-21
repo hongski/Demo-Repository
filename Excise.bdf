@@ -1,0 +1,130 @@
+// ----------------------------------------------------------------------
+// Recorded 2011-11-14 by SilkPerformer Recorder v8.3.0.4793
+// ----------------------------------------------------------------------
+// Rule set "ASP.NET ViewState"
+//  * Rule "Parse and Replace __VIEWSTATE"
+//  * Rule "Parse and Replace __EVENTVALIDATION"
+// ----------------------------------------------------------------------
+
+@codepage(949)
+
+benchmark SilkPerformerRecorder
+
+use "WebAPI.bdh"
+
+dcluser
+  user
+    VUser
+  transactions
+    TInit           : begin;
+    TMain           : 1;
+
+var
+
+dclrand
+
+dcltrans
+  transaction TInit
+  begin
+    WebSetBrowser(WEB_BROWSER_MSIE8);
+    WebModifyHttpHeader("Accept-Language", "ko-KR,en;q=0.5");
+    //WebSetUserBehavior(WEB_USERBEHAVIOR_FIRST_TIME);
+    //WebSetDocumentCache(true, WEB_CACHE_CHECK_SESSION);
+  end TInit;
+
+  transaction TMain
+  var
+  begin
+    // Redirecting -> (redirection) http://demoapps.microfocus.com/shopitv60/
+    WebPageUrl("http://demoapps.microfocus.com/shopitv60", "ShopIt - Greetings");
+ 
+    ThinkTime(51.9);
+    MeasureStart("LogIn");
+ 
+    WebPageLink("Join the experience!", "ShopIt - New Visitor"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    ThinkTime(5.0);
+    WebPageSubmit("Enter", ENTER001, "ShopIt - Main menu"); // Form 1
+    MeasureStop("LogIn");
+ 
+    ThinkTime(32.6);
+    MeasureStart("SearchAndAdd");
+ 
+    WebPageAddUrl("images/arrowLeftBrown.gif");
+    WebPageLink("Search", "ShopIt - Search"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    WebPageAddUrl("images/arrowLeftBrown.gif");
+    // Redirecting http://demoapps.microfocus.com/shopitv60/checkselection.asp?product=pants&Button=Submit+with+GET
+    // -> (redirection) http://demoapps.microfocus.com/shopitv60/product.asp?code=10
+    ThinkTime(11.1);
+    WebPageSubmit("Submit with GET", SUBMIT_WITH_GET002, "ShopIt - Product"); // Form 1
+ 
+    WebPageAddUrl("images/arrowLeftBrown.gif");
+    ThinkTime(8.9);
+    WebPageLink("Add to basket", "ShopIt - Basket"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    ThinkTime(5.6);
+    WebPageLink("Back to main menu", "ShopIt - Main menu (#1)"); // Link 1
+    MeasureStop("SearchAndAdd");
+ 
+    ThinkTime(39.7);
+    MeasureStart("CheckOut");
+ 
+    WebPageAddUrl("images/arrowLeftBrown.gif");
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    WebPageLink("Check out", "ShopIt - Check Out"); // Link 3
+ 
+    WebPageParseUrl("Javascript Redirection in page kindofpayment.asp", "href=\"", "\"", WEB_FLAG_IGNORE_WHITE_SPACE);
+    ThinkTime(9.8);
+    WebPageUrl("http://demoapps.microfocus.com/shopitv60/kindofpayment.asp", "kindofpayment.asp", SHOPITV60_KINDOFPAYMENT_ASP003
+      );
+ 
+    WebPageAddUrl("images/arrowRight.gif");
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    WebPageParseUrl("Modified form action URL in page ShopIt - Pay with credit card", "action = \"", "\"", 
+      WEB_FLAG_IGNORE_WHITE_SPACE);
+    WebPageLink("Javascript Redirection in page kindofpayment.asp", "ShopIt - Pay with credit card");
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    WebPageSetActionUrl("Modified form action URL in page ShopIt - Pay with credit card");
+    ThinkTime(60.7);
+    WebPageSubmit("myForm", MYFORM004, "ShopIt - Acknowledge"); // Form 1
+ 
+    ThinkTime(2.2);
+    WebPageLink("Proceed", "ShopIt - Thanks"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    ThinkTime(5.6);
+    WebPageUrl("http://demoapps.microfocus.com/shopitv60/fin.asp", "ShopIt - Fin");
+    MeasureStop("CheckOut");
+ 
+  end TMain;
+
+dclform
+  ENTER001:
+    "name"                      := "osh", // changed
+    "New-Name-Button"           := "" <USE_HTML_VAL> ; // unchanged, value: "Enter"
+
+  SUBMIT_WITH_GET002:
+    "product"                   := "pants", // changed
+    "Button"                    := "" <USE_HTML_VAL> ; // unchanged, value: "Submit with GET"
+
+  SHOPITV60_KINDOFPAYMENT_ASP003:
+    "choice"                    := "CreditCard",
+    "price"                     := "39.9",
+    "sid"                       := "92656955";
+
+  MYFORM004:
+    "address"                   := "Songpa", // changed
+    "city"                      := "Seoul", // changed
+    "state"                     := "Korea", // changed
+    "zip"                       := "" <SUPPRESS> , // suppressed, value: ""
+    "ZipCode"                   := "112-122", // added
+    "cardtype"                  := "American Express", // added
+    "cardnumber"                := "0000000000000000", // changed
+    "expiration"                := "20181231", // changed
+    "sid"                       := "" <USE_HTML_VAL> ; // hidden, unchanged, value: "92656955"
+
