@@ -1,0 +1,214 @@
+// ----------------------------------------------------------------------
+// Recorded 2011-12-14 by SilkPerformer Recorder v8.3.0.4793
+// ----------------------------------------------------------------------
+// Rule set "ASP.NET ViewState"
+//  * Rule "Parse and Replace __VIEWSTATE"
+//  * Rule "Parse and Replace __EVENTVALIDATION"
+// ----------------------------------------------------------------------
+
+@codepage(949)
+
+benchmark SilkPerformerRecorder
+
+use "Odbc.bdh"
+
+dcluser
+  user
+    VUser
+  transactions
+    TInit           : begin;
+    TMain           : 1;
+
+var
+  c1     : cursor;
+  c2     : cursor;
+  ghDbc1 : number;
+  ghEnv1 : number;
+  ghEnv2 : number;
+
+dclrand
+
+dcltrans
+  transaction TInit
+  begin
+  end TInit;
+
+  transaction TMain
+  var
+  begin
+    OdbcAlloc(SQL_HANDLE_ENV, ghEnv1);
+    OdbcAlloc(SQL_HANDLE_ENV, ghEnv2);
+    OdbcAlloc(SQL_HANDLE_DBC, ghDbc1, ghEnv2);
+    OdbcConnect(ghDbc1, "DSN=SilkPerformer;Description=test;UID=sa;WSID=KOR-SANGHYUNO2;PWD=O73690120o;");
+    OdbcOpen(c1, ghDbc1);
+    OdbcGetTypeInfo(c1, SQL_BIGINT);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_CHAR);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_DATE);
+    OdbcDefine(c1, "3", SQL_C_SHORT, 2);
+    OdbcFetch(c1, SQL_FETCH_ALL, 1, SQL_FETCH_NEXT); // 0 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcClose(c1, SQL_UNBIND);
+    OdbcGetTypeInfo(c1, SQL_DECIMAL);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_DOUBLE);
+    OdbcFetch(c1, SQL_FETCH_ALL, 1, SQL_FETCH_NEXT); // 0 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_FLOAT);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_INTEGER);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_LONGVARBINARY);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_LONGVARCHAR);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_NUMERIC);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_REAL);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_SMALLINT);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_TINYINT);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_VARBINARY);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_VARCHAR);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcGetTypeInfo(c1, SQL_TIME);
+    OdbcDefine(c1, "3", SQL_C_SHORT, 2);
+    OdbcFetch(c1, SQL_FETCH_ALL, 1, SQL_FETCH_NEXT); // 0 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcClose(c1, SQL_UNBIND);
+    OdbcGetTypeInfo(c1, SQL_TIMESTAMP);
+    OdbcDefine(c1, "3", SQL_C_SHORT, 2);
+    OdbcFetch(c1, 1, 1, SQL_FETCH_NEXT); // 1 rows fetched
+ 
+ 
+    OdbcClose(c1);
+    OdbcClose(c1, SQL_UNBIND);
+    OdbcClose(c1, SQL_RESET_PARAMS);
+    OdbcClose(c1, SQL_DROP);
+    OdbcOpen(c1, ghDbc1);
+    OdbcSetConnectAttr(ghDbc1, SQL_ATTR_AUTOCOMMIT, SQL_AUTOCOMMIT_OFF);
+    OdbcOpen(c2, ghDbc1);
+    OdbcClose(c2);
+
+    /***
+    TMain_SQL001:
+      select p_no 
+      from my_numbers;
+    ***/
+    OdbcPrepare(c2, TMain_SQL001);
+    OdbcClose(c2);
+    OdbcExecute(c2);
+    OdbcDefine(c2, "1", SQL_C_CHAR, 12);
+    OdbcFetch(c2, SQL_FETCH_ALL, 1, SQL_FETCH_NEXT); // 0 rows fetched
+ 
+ 
+    ThinkTime(30.4);
+    MeasureStart("01_Select_All");
+    OdbcClose(c1);
+
+    /***
+    TMain_SQL002:
+      select p_no,p_opening,p_title,p_lastname,p_firstname,p_aline1,p_zip 
+      from my_person 
+      order by p_lastname,p_zip;
+    ***/
+    OdbcPrepare(c1, TMain_SQL002);
+    OdbcClose(c1);
+    OdbcExecute(c1);
+    OdbcDefine(c1, "1", SQL_C_CHAR, 12);
+    OdbcDefine(c1, "2", SQL_C_CHAR, 11);
+    OdbcDefine(c1, "3", SQL_C_CHAR, 11);
+    OdbcDefine(c1, "4", SQL_C_CHAR, 61);
+    OdbcDefine(c1, "5", SQL_C_CHAR, 41);
+    OdbcDefine(c1, "6", SQL_C_CHAR, 81);
+    OdbcDefine(c1, "7", SQL_C_CHAR, 11);
+  //  OdbcFetch(c1, SQL_FETCH_ALL, 1, SQL_FETCH_NEXT); // 4 rows fetched
+ 
+ 
+     
+while OdbcFetch(c1) do
+      writeln(" Property Number: " + OdbcGetString(c1, "1"));   
+      writeln(" Salutation: " + OdbcGetString(c1, "2"));   
+      writeln(" Title: " + OdbcGetString(c1, "3"));   
+      writeln(" Last Name : " + OdbcGetString(c1, "4"));   
+      writeln(" First Name: " + OdbcGetString(c1, "5"));   
+      writeln(" Address: " + OdbcGetString(c1, "6"));   
+      writeln(" Zip Code: " + OdbcGetString(c1, "7"));  
+      writeln("========================================================"); 
+    end;
+
+ 
+    ThinkTime(5.2);
+    OdbcClose(c1, SQL_UNBIND);
+    OdbcRollback(ghDbc1);
+    OdbcClose(c2, SQL_UNBIND);
+    OdbcClose(c1, SQL_DROP);
+    OdbcClose(c2, SQL_DROP);
+    OdbcRollback(ghDbc1);
+    OdbcDisconnect(ghDbc1);
+    OdbcFree(ghDbc1);
+    OdbcFree(ghEnv2);
+    OdbcFree(ghEnv1);
+    MeasureStop("01_Select_All");
+ 
+  end TMain;
+
+dclsql
+  TMain_SQL001:
+    select p_no 
+    from my_numbers;
+
+  TMain_SQL002:
+    select p_no,p_opening,p_title,p_lastname,p_firstname,p_aline1,p_zip 
+    from my_person 
+    order by p_lastname,p_zip;
+
