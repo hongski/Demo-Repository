@@ -1,0 +1,15 @@
+
+Creating domain suppression rules for the following browser-specific domains: 
+ 	 	detectportal.firefox.com self-repair.mozilla.org search.services.mozilla.com shavar.services.mozilla.com tiles.services.mozilla.com tiles-cloudfront.cdn.mozilla.net tracking-protection.cdn.mozilla.net incoming.telemetry.mozilla.org aus1.mozilla.org aus2.mozilla.org aus3.mozilla.org aus4.mozilla.org aus5.mozilla.org urs.microsoft.com iecvlist.microsoft.com ieonline.microsoft.com r20swj13mr.microsoft.com dm2304.storage.live.com www.bing.com www.googleapis.com clientservices.googleapis.com translate.googleapis.com accounts.google.com clients1.google.com clients2.google.com clients3.google.com clients4.google.com clients2.googleusercontent.com ssl.gstatic.com safebrowsing.google.com safebrowsing-cache.google.com  and for paths searchdomaincheck?format=domain 
+Excluding proprietary TCP/IP traffic
+Excluding UDP traffic
+Reading rule file "C:\Users\Public\Documents\Silk Performer 19.5\RecordingRules\ASP.NET.xrl"
+ + Rule set "ASP.NET ViewState"
+  + HTTP parsing rule "Parse and Replace __VIEWSTATE"
+  + HTTP parsing rule "Parse and Replace __EVENTVALIDATION"
+Reading rule file "C:\Users\Public\Documents\Silk Performer 19.5\RecordingRules\No AddUrl.xrl"
+ + Rule set "No AddURL"
+  - Http scripting rule "No AddURL", not active
+Reading rule file "C:\Users\Public\Documents\Silk Performer 19.5\RecordingRules\No Header Modification.xrl"
+ + Rule set "Don't Modify Response Headers"
+  - ProxyEngine rule "Suppress modification of any server response headers.", not active
