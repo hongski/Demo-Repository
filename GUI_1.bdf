@@ -1,0 +1,37 @@
+// ----------------------------------------------------------------------
+// <insert description here>
+// ----------------------------------------------------------------------
+// Author :
+// Date   :
+// ----------------------------------------------------------------------
+
+benchmark SilkTestBenchmarkName
+
+use "kernel.bdh"
+use "StAutomation.bdh"
+
+dcluser
+  user
+    SilkTestUser
+  transactions
+    TInit         : begin;
+    TRecordedTest : 1;
+
+
+dcltrans
+
+  transaction TInit
+  var
+    sUser : string;
+    sPasswd : string;
+  begin
+//    AttributeGetString("Username", sUser);
+//    AttributeGetString("Password", sPasswd);
+  //  StInitSession(sUser, sPasswd);
+ //     StInitSession();
+  end TInit;
+
+  transaction TRecordedTest
+  begin
+    StExecuteTestcase("TestScript.t", "RecordedTest", "", "TimerRecordedTest");
+  end TRecordedTest;
