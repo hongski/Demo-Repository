@@ -1,0 +1,239 @@
+// ----------------------------------------------------------------------
+// Recorded 2011-11-14 by SilkPerformer Recorder v8.3.0.4793
+// ----------------------------------------------------------------------
+// Rule set "ASP.NET ViewState"
+//  * Rule "Parse and Replace __VIEWSTATE"
+//  * Rule "Parse and Replace __EVENTVALIDATION"
+// ----------------------------------------------------------------------
+
+@codepage(949)
+
+benchmark SilkPerformerRecorder
+
+use "WebAPI.bdh"
+use "MeasureBounds.bdh"
+
+dclparam
+  sSessionInfo1     : string;
+  sSessionInfo2     : string;
+
+dcluser
+  user
+    VUser
+  transactions
+    TInit           : begin;
+    TMain           : 1;
+
+var
+  sFormSid1         : string;
+  sFormSid2         : string;
+  sFormSid3         : string;
+
+dclrand
+
+dcltrans
+  transaction TInit
+  begin
+    WebSetBrowser(WEB_BROWSER_MSIE8);
+    WebModifyHttpHeader("Accept-Language", "ko-KR,en;q=0.5");
+    InitMeasureBounds();
+  end TInit;
+
+  transaction TMain
+  var
+  begin
+    WebUrlBeginPage("ShopIt - Greetings");
+    // Redirecting -> (redirection) http://demoapps.microfocus.com/shopitv60/
+    WebUrl("http://demoapps.microfocus.com/shopitv60");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRightBrown.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRight.gif");
+    // Info: HTTP status "404 Not Found" for URL: http://demoapps.microfocus.com/favicon.ico
+    WebIgnoreServerError(404, SEVERITY_INFORMATIONAL, 1);
+    WebModifyHttpHeader("Accept-Language", NULL, WEB_MODIFY_OPT_Remove);
+    WebUrl("http://demoapps.microfocus.com/favicon.ico");
+    WebUrlEndPage(); // ShopIt - Greetings
+ 
+    ThinkTime(3.6);
+    WebUrlBeginPage("ShopIt - New Visitor");
+    WebModifyHttpHeader("Accept-Language", "ko-KR,en;q=0.5");
+    WebFormGet("http://demoapps.microfocus.com/shopitv60/main.asp", SHOPITV60_MAIN_ASP001);
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    // Info: HTTP status "404 Not Found" for URL: http://demoapps.microfocus.com/favicon.ico
+    WebIgnoreServerError(404, SEVERITY_INFORMATIONAL, 1);
+    WebModifyHttpHeader("Accept-Language", NULL, WEB_MODIFY_OPT_Remove);
+    WebUrl("http://demoapps.microfocus.com/favicon.ico");
+    WebUrlEndPage(); // ShopIt - New Visitor
+ 
+    ThinkTime(5.5);
+    WebUrlBeginPage("ShopIt - Main menu");
+    WebModifyHttpHeader("Accept-Language", "ko-KR,en;q=0.5");
+    WebFormPost("http://demoapps.microfocus.com/shopitv60/main.asp", SHOPITV60_MAIN_ASP002);
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrlEndPage(); // ShopIt - Main menu
+ 
+    ThinkTime(3.3);
+    WebUrlBeginPage("ShopIt - Search");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/search.asp");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/productsSearch.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowLeft.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowLeftBrown.gif");
+    WebUrlEndPage(); // ShopIt - Search
+ 
+    ThinkTime(4.8);
+    WebParseDataBoundEx(sSessionInfo1, STRING_COMPLETE, "href=\"", 5, "\"", WEB_FLAG_IGNORE_WHITE_SPACE | WEB_FLAG_CASE_SENSITIVE,
+      1);
+    WebUrlBeginPage("ShopIt - Product");
+
+    Print("sSessionInfo1: " + sSessionInfo1);
+    Writeln("sSessionInfo1: " + sSessionInfo1);
+
+
+    // Redirecting -> (redirection) http://demoapps.microfocus.com/shopitv60/product.asp?code=10
+    WebFormGet("http://demoapps.microfocus.com/shopitv60/checkselection.asp", SHOPITV60_CHECKSELECTION_ASP003);
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/product10.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowLeft.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRight.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRightBrown.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowLeftBrown.gif");
+    WebUrlEndPage(); // ShopIt - Product
+ 
+    ThinkTime(3.2);
+    WebUrlBeginPage("ShopIt - Basket");
+    WebFormGet("http://demoapps.microfocus.com/shopitv60/basket.asp", SHOPITV60_BASKET_ASP004);
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowLeft.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowLeftBrown.gif");
+    WebUrlEndPage(); // ShopIt - Basket
+ 
+    ThinkTime(2.2);
+    WebUrlBeginPage("ShopIt - Main menu (#1)");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/main.asp");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRight.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRightBrown.gif");
+    WebUrlEndPage(); // ShopIt - Main menu (#1)
+ 
+    ThinkTime(3.9);
+    WebParseDataBoundEx(sSessionInfo2, STRING_COMPLETE, "name=\"", 5, "\"", WEB_FLAG_IGNORE_WHITE_SPACE | WEB_FLAG_CASE_SENSITIVE,
+      1);
+    WebUrlBeginPage("ShopIt - Check Out");
+    Print("sSessionInfo2: " + sSessionInfo2);
+    Writeln("sSessionInfo2: " + sSessionInfo2);
+    WebUrl("http://demoapps.microfocus.com/shopitv60/checkout.asp");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowLeft.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRightBrown.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowLeftBrown.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRight.gif");
+    WebUrlEndPage(); // ShopIt - Check Out
+ 
+    ThinkTime(2.3);
+    WebUrlBeginPage("kindofpayment.asp");
+    sFormSid1 := sSessionInfo2;
+    WebFormGet("http://demoapps.microfocus.com/shopitv60/kindofpayment.asp", SHOPITV60_KINDOFPAYMENT_ASP005);
+    WebUrlEndPage(); // kindofpayment.asp
+ 
+    WebUrlBeginPage("ShopIt - Pay with credit card");
+    sFormSid2 := sSessionInfo2;
+    WebFormGet("http://demoapps.microfocus.com/shopitv60/card.asp", SHOPITV60_CARD_ASP006);
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRightBrown.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRight.gif");
+    WebUrlEndPage(); // ShopIt - Pay with credit card
+ 
+    ThinkTime(22.7);
+    WebUrlBeginPage("ShopIt - Acknowledge");
+    sFormSid3 := sSessionInfo2;
+    WebFormPost("http://demoapps.microfocus.com/shopitv60/acknowledge.asp", SHOPITV60_ACKNOWLEDGE_ASP007);
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRightBrown.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRight.gif");
+    WebUrlEndPage(); // ShopIt - Acknowledge
+ 
+    WebUrlBeginPage("ShopIt - Thanks");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/thanks.asp");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrlEndPage(); // ShopIt - Thanks
+ 
+    ThinkTime(5.6);
+    WebUrlBeginPage("ShopIt - Fin");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/fin.asp");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/shopIt.css");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/logo.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/transparent.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/theme.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRight.gif");
+    WebUrl("http://demoapps.microfocus.com/shopitv60/images/arrowRightBrown.gif");
+    WebUrlEndPage(); // ShopIt - Fin
+  end TMain;
+
+dclform
+  SHOPITV60_MAIN_ASP001:
+    "from"                      := "welcome";
+
+  SHOPITV60_MAIN_ASP002:
+    "name"                      := "OSH",
+    "New-Name-Button"           := "Enter";
+
+  SHOPITV60_CHECKSELECTION_ASP003:
+    "product"                   := "pants",
+    "Button"                    := "Submit with GET";
+
+  SHOPITV60_BASKET_ASP004:
+    "code"                      := "10";
+
+  SHOPITV60_KINDOFPAYMENT_ASP005:
+    "choice"                    := "CreditCard",
+    "price"                     := "39.9",
+//     "sid"                       := "92662811";
+    "sid"                       := sFormSid1;
+
+  SHOPITV60_CARD_ASP006:
+//     "sid"                       := "92662811";
+    "sid"                       := sFormSid2;
+
+  SHOPITV60_ACKNOWLEDGE_ASP007:
+    "address"                   := "Songpa",
+    "city"                      := "Seoul",
+    "state"                     := "Korea",
+    "ZipCode"                   := "111-111",
+    "cardtype"                  := "American Express",
+    "cardnumber"                := "0000000000000000",
+    "expiration"                := "2011-12-12",
+//     "sid"                       := "92662811";
+    "sid"                       := sFormSid3;
+

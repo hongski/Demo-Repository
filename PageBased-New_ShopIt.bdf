@@ -1,0 +1,382 @@
+// ----------------------------------------------------------------------
+// Recorded 2011-11-15 by SilkPerformer Recorder v8.3.0.4793
+// ----------------------------------------------------------------------
+// Rule set "ASP.NET ViewState"
+//  * Rule "Parse and Replace __VIEWSTATE"
+//  * Rule "Parse and Replace __EVENTVALIDATION"
+// ----------------------------------------------------------------------
+
+@codepage(949)
+
+benchmark SilkPerformerRecorder
+
+use "WebAPI.bdh"
+
+dclparam
+  sParseDataVar1    : string;
+
+dcluser
+  user
+    VUser
+  transactions
+    TInit           : begin;
+    TMain           : 1;
+
+  user
+    RetProducts
+  transactions
+    TInit : begin;
+    tRetProducts : 1;
+
+  user
+    NewSearch
+  transactions
+    TInit : begin;
+    tNewSearch : 1;
+
+var
+
+dclrand
+
+dclfunc
+  function fCheckOut
+  begin
+    // TODO: add function code here 
+    MeasureStart("03_SearchCheckout");
+ 
+    WebParseDataBoundEx(sParseDataVar1, STRING_COMPLETE, "right>", 2, "<", WEB_FLAG_IGNORE_WHITE_SPACE | WEB_FLAG_CASE_SENSITIVE,
+      1);
+      
+    WebPageLink("Check out", "ShopIt - Check Out"); // Link 3
+    Print("sParseDataVar1: " + sParseDataVar1);
+    Writeln("sParseDataVar1: " + sParseDataVar1);
+ 
+    // Redirecting http://demoapps.microfocus.com/shopit/kindofpayment.asp
+    // -> (redirection) http://demoapps.microfocus.com/shopit/card.asp
+    ThinkTime(4.9);
+    WebPageSubmit("Submit", SUBMIT003, "ShopIt - Pay with credit card"); // Form 1
+ 
+    ThinkTime(5.4);
+    WebPageSubmit("Buy now", BUY_NOW004, "ShopIt - Acknowledge"); // Form 1
+ 
+    //WebCookieSet("product10=1; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:40:04 GMT", 
+      //"http://demoapps.microfocus.com/shopit/");
+    //WebCookieSet("Keyword=pants; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:40:04 GMT", 
+      //"http://demoapps.microfocus.com/shopit/");
+    ThinkTime(8.8);
+    WebPageLink("Continue", "ShopIt - Thanks"); // Link 1
+ 
+    ThinkTime(5.0);
+    WebPageUrl("http://demoapps.microfocus.com/shopit/fin.asp", "ShopIt - Fin");
+ 
+    ThinkTime(2.7);
+    WebPageLink("Start again", "ShopIt - Greetings (#1)"); // Link 1
+    MeasureStop("03_SearchCheckout");
+    
+  end fCheckOut;
+
+dcltrans
+  transaction tRetProducts
+  begin
+    //TODO: add transaction code here
+    WebCookieSet("Visitor=osh; domain=.microfocus.com; path=/shopit; expires=Wed, 16 Nov 2011 01:38:10 GMT", 
+      "http://demoapps.microfocus.com/shopit/"); 
+    
+    WebIgnoreServerError(404, SEVERITY_INFORMATIONAL, 1);
+    
+    WebPageAddUrl("/favicon.ico");
+    
+    WebPageUrl("http://demoapps.microfocus.com/shopit", "ShopIt - Greetings");
+ 
+    ThinkTime(108.3);
+    
+    MeasureStart("04_RetLogin");
+ 
+    WebPageLink("Join the experience!", "ShopIt - Confirm your name"); // Link 1
+ 
+    ThinkTime(7.3);
+    WebPageSubmit("confirm", CONFIRM005, "ShopIt - Main menu (#2)"); // Form 1
+    MeasureStop("04_RetLogin");
+ 
+    ThinkTime(27.1);
+    MeasureStart("05_ProductsAndAdd");
+ 
+    WebPageLink("Products", "ShopIt - Products"); // Link 2
+ 
+    // Redirecting http://demoapps.microfocus.com/shopit/checkselection.asp?product=carabiner
+    // -> (redirection) http://demoapps.microfocus.com/shopit/product.asp?code=5
+    ThinkTime(15.2);
+    WebPageLink("Carabiner", "ShopIt - Product (#1)"); // Link 2
+ 
+    ThinkTime(5.9);
+    WebPageLink("Add to basket", "ShopIt - Basket (#1)"); // Link 1
+ 
+    ThinkTime(6.3);
+    WebPageLink("Back to main menu", "ShopIt - Main menu (#3)"); // Link 1
+    MeasureStop("05_ProductsAndAdd");
+ 
+    ThinkTime(25.2);
+   
+    fCheckOut();
+//    MeasureStart("06_ProductsCheckout");
+// 
+//    WebPageLink("Check out", "ShopIt - Check Out (#1)"); // Link 3
+// 
+//    // Redirecting http://demoapps.microfocus.com/shopit/kindofpayment.asp
+//    // -> (redirection) http://demoapps.microfocus.com/shopit/card.asp
+//    WebPageSubmit("Submit", SUBMIT006, "ShopIt - Pay with credit card (#1)"); // Form 1
+// 
+//    ThinkTime(6.6);
+//    WebPageSubmit("Buy now", BUY_NOW007, "ShopIt - Acknowledge (#1)"); // Form 1
+// 
+//    //WebCookieSet("product5=1; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:42:50 GMT", 
+//      //"http://demoapps.microfocus.com/shopit/");
+//    //WebCookieSet("Keyword=carabiner; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:42:50 GMT", 
+//      //"http://demoapps.microfocus.com/shopit/");
+//    WebPageLink("Continue", "ShopIt - Thanks (#1)"); // Link 1
+// 
+//    ThinkTime(5.0);
+//    WebPageUrl("http://demoapps.microfocus.com/shopit/fin.asp", "ShopIt - Fin (#1)");
+// 
+//    ThinkTime(8.1);
+//    WebPageLink("Start again", "ShopIt - Greetings (#2)"); // Link 1
+//    MeasureStop("06_ProductsCheckout");
+ 
+  end tRetProducts;
+
+  transaction tNewSearch
+  
+    begin
+    //TODO: add transaction code here
+
+    WebPageUrl("http://demoapps.microfocus.com/shopit", "ShopIt - Greetings");
+ 
+    ThinkTime(108.3);
+    MeasureStart("01_NewLogin");
+ 
+    WebPageLink("Join the experience!", "ShopIt - New Visitor"); // Link 1
+ 
+    //WebCookieSet("Visitor=osh; domain=.microfocus.com; path=/shopit; expires=Wed, 16 Nov 2011 01:38:10 GMT", 
+      //"http://demoapps.microfocus.com/shopit/");
+    ThinkTime(5.0);
+    WebPageSubmit("Continue", CONTINUE001, "ShopIt - Main menu"); // Form 1
+    MeasureStop("01_NewLogin");
+ 
+    ThinkTime(35.8);
+    
+    MeasureStart("02_SearchAndAdd");
+  
+    sParseDataVar1:="0";
+    
+      While number(sParseDataVar1) < 200
+        do
+	           WebPageLink("Search", "ShopIt - Search"); // Link 1
+ 
+             ThinkTime(8.9);
+             WebPageSubmit("Submit with GET", SUBMIT_WITH_GET002, "ShopIt - Product"); // Form 1
+           
+             ThinkTime(6.9);
+             WebPageLink("Add to basket", "ShopIt - Basket"); // Link 1
+           
+             ThinkTime(7.0);
+             WebPageLink("Back to main menu", "ShopIt - Main menu (#1)"); // Link 1
+              
+             MeasureStop("02_SearchAndAdd");
+              
+             ThinkTime(34.9);
+    
+        end;
+
+    
+//    MeasureStart("03_SearchCheckout");
+// 
+//    WebPageLink("Check out", "ShopIt - Check Out"); // Link 3
+// 
+//    // Redirecting http://demoapps.microfocus.com/shopit/kindofpayment.asp
+//    // -> (redirection) http://demoapps.microfocus.com/shopit/card.asp
+//    ThinkTime(4.9);
+//    WebPageSubmit("Submit", SUBMIT003, "ShopIt - Pay with credit card"); // Form 1
+// 
+//    ThinkTime(5.4);
+//    WebPageSubmit("Buy now", BUY_NOW004, "ShopIt - Acknowledge"); // Form 1
+// 
+//    //WebCookieSet("product10=1; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:40:04 GMT", 
+//      //"http://demoapps.microfocus.com/shopit/");
+//    //WebCookieSet("Keyword=pants; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:40:04 GMT", 
+//      //"http://demoapps.microfocus.com/shopit/");
+//    ThinkTime(8.8);
+//    WebPageLink("Continue", "ShopIt - Thanks"); // Link 1
+// 
+//    ThinkTime(5.0);
+//    WebPageUrl("http://demoapps.microfocus.com/shopit/fin.asp", "ShopIt - Fin");
+// 
+//    ThinkTime(2.7);
+//    WebPageLink("Start again", "ShopIt - Greetings (#1)"); // Link 1
+//    MeasureStop("03_SearchCheckout");
+    
+    fCheckOut();
+ 
+    ThinkTime(58.0);
+  
+  
+  end tNewSearch;
+
+  transaction TInit
+  begin
+    WebSetBrowser(WEB_BROWSER_MSIE8);
+    WebModifyHttpHeader("Accept-Language", "ko-KR,en;q=0.5");
+    //WebSetUserBehavior(WEB_USERBEHAVIOR_FIRST_TIME);
+    //WebSetDocumentCache(true, WEB_CACHE_CHECK_SESSION);
+  end TInit;
+
+  transaction TMain
+  var
+  begin
+    // Info: HTTP status "404 Not Found" for URL: http://demoapps.microfocus.com/favicon.ico
+    WebIgnoreServerError(404, SEVERITY_INFORMATIONAL, 1);
+    WebPageAddUrl("/favicon.ico");
+    // Redirecting -> (redirection) http://demoapps.microfocus.com/shopit/
+    WebPageUrl("http://demoapps.microfocus.com/shopit", "ShopIt - Greetings");
+ 
+    ThinkTime(108.3);
+    MeasureStart("01_NewLogin");
+ 
+    WebPageLink("Join the experience!", "ShopIt - New Visitor"); // Link 1
+ 
+    //WebCookieSet("Visitor=osh; domain=.microfocus.com; path=/shopit; expires=Wed, 16 Nov 2011 01:38:10 GMT", 
+      //"http://demoapps.microfocus.com/shopit/");
+    ThinkTime(5.0);
+    WebPageSubmit("Continue", CONTINUE001, "ShopIt - Main menu"); // Form 1
+    MeasureStop("01_NewLogin");
+ 
+    ThinkTime(35.8);
+    MeasureStart("02_SearchAndAdd");
+ 
+    WebPageLink("Search", "ShopIt - Search"); // Link 1
+ 
+    // Redirecting http://demoapps.microfocus.com/shopit/checkselection.asp?product=pants&Button=Submit+with+GET
+    // -> (redirection) http://demoapps.microfocus.com/shopit/product.asp?code=10
+    ThinkTime(8.9);
+    WebPageSubmit("Submit with GET", SUBMIT_WITH_GET002, "ShopIt - Product"); // Form 1
+ 
+    ThinkTime(6.9);
+    WebPageLink("Add to basket", "ShopIt - Basket"); // Link 1
+ 
+    ThinkTime(7.0);
+    WebPageLink("Back to main menu", "ShopIt - Main menu (#1)"); // Link 1
+    MeasureStop("02_SearchAndAdd");
+ 
+    ThinkTime(34.9);
+    MeasureStart("03_SearchCheckout");
+ 
+    WebPageLink("Check out", "ShopIt - Check Out"); // Link 3
+ 
+    // Redirecting http://demoapps.microfocus.com/shopit/kindofpayment.asp
+    // -> (redirection) http://demoapps.microfocus.com/shopit/card.asp
+    ThinkTime(4.9);
+    WebPageSubmit("Submit", SUBMIT003, "ShopIt - Pay with credit card"); // Form 1
+ 
+    ThinkTime(5.4);
+    WebPageSubmit("Buy now", BUY_NOW004, "ShopIt - Acknowledge"); // Form 1
+ 
+    //WebCookieSet("product10=1; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:40:04 GMT", 
+      //"http://demoapps.microfocus.com/shopit/");
+    //WebCookieSet("Keyword=pants; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:40:04 GMT", 
+      //"http://demoapps.microfocus.com/shopit/");
+    ThinkTime(8.8);
+    WebPageLink("Continue", "ShopIt - Thanks"); // Link 1
+ 
+    ThinkTime(5.0);
+    WebPageUrl("http://demoapps.microfocus.com/shopit/fin.asp", "ShopIt - Fin");
+ 
+    ThinkTime(2.7);
+    WebPageLink("Start again", "ShopIt - Greetings (#1)"); // Link 1
+    MeasureStop("03_SearchCheckout");
+ 
+    ThinkTime(58.0);
+    MeasureStart("04_RetLogin");
+ 
+    WebPageLink("Join the experience!", "ShopIt - Confirm your name"); // Link 1
+ 
+    ThinkTime(7.3);
+    WebPageSubmit("confirm", CONFIRM005, "ShopIt - Main menu (#2)"); // Form 1
+    MeasureStop("04_RetLogin");
+ 
+    ThinkTime(27.1);
+    MeasureStart("05_ProductsAndAdd");
+ 
+    WebPageLink("Products", "ShopIt - Products"); // Link 2
+ 
+    // Redirecting http://demoapps.microfocus.com/shopit/checkselection.asp?product=carabiner
+    // -> (redirection) http://demoapps.microfocus.com/shopit/product.asp?code=5
+    ThinkTime(15.2);
+    WebPageLink("Carabiner", "ShopIt - Product (#1)"); // Link 2
+ 
+    ThinkTime(5.9);
+    WebPageLink("Add to basket", "ShopIt - Basket (#1)"); // Link 1
+ 
+    ThinkTime(6.3);
+    WebPageLink("Back to main menu", "ShopIt - Main menu (#3)"); // Link 1
+    MeasureStop("05_ProductsAndAdd");
+ 
+    ThinkTime(25.2);
+    MeasureStart("06_ProductsCheckout");
+ 
+    WebPageLink("Check out", "ShopIt - Check Out (#1)"); // Link 3
+ 
+    // Redirecting http://demoapps.microfocus.com/shopit/kindofpayment.asp
+    // -> (redirection) http://demoapps.microfocus.com/shopit/card.asp
+    WebPageSubmit("Submit", SUBMIT006, "ShopIt - Pay with credit card (#1)"); // Form 1
+ 
+    ThinkTime(6.6);
+    WebPageSubmit("Buy now", BUY_NOW007, "ShopIt - Acknowledge (#1)"); // Form 1
+ 
+    //WebCookieSet("product5=1; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:42:50 GMT", 
+      //"http://demoapps.microfocus.com/shopit/");
+    //WebCookieSet("Keyword=carabiner; domain=.microfocus.com; path=/shopit; expires=Mon, 14 Nov 2011 01:42:50 GMT", 
+      //"http://demoapps.microfocus.com/shopit/");
+    WebPageLink("Continue", "ShopIt - Thanks (#1)"); // Link 1
+ 
+    ThinkTime(5.0);
+    WebPageUrl("http://demoapps.microfocus.com/shopit/fin.asp", "ShopIt - Fin (#1)");
+ 
+    ThinkTime(8.1);
+    WebPageLink("Start again", "ShopIt - Greetings (#2)"); // Link 1
+    MeasureStop("06_ProductsCheckout");
+ 
+  end TMain;
+
+dclform
+  CONTINUE001:
+    "name"                      := "osh", // changed
+    "New-Name-Button"           := "" <USE_HTML_VAL> ; // unchanged, value: "Continue"
+
+  SUBMIT_WITH_GET002:
+    "product"                   := "pants", // changed
+    "Button"                    := "" <USE_HTML_VAL> ; // unchanged, value: "Submit with GET"
+
+  SUBMIT003:
+    "choice"                    := "Credit card", // added
+    "price"                     := "" <USE_HTML_VAL> , // hidden, unchanged, value: "39.9"
+    "paymentButton"             := "" <USE_HTML_VAL> ; // unchanged, value: "Submit"
+
+  BUY_NOW004:
+    "address"                   := "sdsdsds", // changed
+    "card"                      := "4444444", // changed
+    "sid"                       := "" <USE_HTML_VAL> , // hidden, unchanged, value: "225638501"
+    "Buy-Button"                := "" <USE_HTML_VAL> ; // unchanged, value: "Buy now"
+
+  CONFIRM005:
+    "Confirm-Button"            := "" <USE_HTML_VAL> ; // unchanged, value: "confirm"
+
+  SUBMIT006:
+    "choice"                    := "Credit card", // added
+    "price"                     := "" <USE_HTML_VAL> , // hidden, unchanged, value: "19.9"
+    "paymentButton"             := "" <USE_HTML_VAL> ; // unchanged, value: "Submit"
+
+  BUY_NOW007:
+    "address"                   := "hhhhh", // changed
+    "card"                      := "555555", // changed
+    "sid"                       := "" <USE_HTML_VAL> , // hidden, unchanged, value: "225638501"
+    "Buy-Button"                := "" <USE_HTML_VAL> ; // unchanged, value: "Buy now"
+

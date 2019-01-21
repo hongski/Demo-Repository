@@ -1,0 +1,141 @@
+// ----------------------------------------------------------------------
+// Recorded 2011-11-14 by SilkPerformer Recorder v8.3.0.4793
+// ----------------------------------------------------------------------
+// Rule set "ASP.NET ViewState"
+//  * Rule "Parse and Replace __VIEWSTATE"
+//  * Rule "Parse and Replace __EVENTVALIDATION"
+// ----------------------------------------------------------------------
+
+@codepage(949)
+
+benchmark SilkPerformerRecorder
+
+use "WebAPI.bdh"
+use "MeasureBounds.bdh"
+
+dclparam
+  sSessionInfo1     : string;
+
+dcluser
+  user
+    VUser
+  transactions
+    TInit           : begin;
+    TMain           : 1;
+
+var
+  sFormSid1          : string;
+  nVerifyHtmlResult1 : number;
+
+dclrand
+  rRndFile1         : RndFile  ("Efname.rnd", 15);
+  rRndFile2         : RndFile  ("Zip.rnd", 18);
+
+dcltrans
+  transaction TInit
+  begin
+    WebSetBrowser(WEB_BROWSER_MSIE8);
+    WebModifyHttpHeader("Accept-Language", "ko-KR,en;q=0.5");
+    //WebSetUserBehavior(WEB_USERBEHAVIOR_FIRST_TIME);
+    //WebSetDocumentCache(true, WEB_CACHE_CHECK_SESSION);
+    InitMeasureBounds();
+  end TInit;
+
+  transaction TMain
+  var
+  begin
+    // Info: HTTP status "404 Not Found" for URL: http://demoapps.microfocus.com/favicon.ico
+    WebIgnoreServerError(404, SEVERITY_INFORMATIONAL, 1);
+    WebPageAddUrl("/favicon.ico");
+    // Redirecting -> (redirection) http://demoapps.microfocus.com/shopitv60/
+    WebPageUrl("http://demoapps.microfocus.com/shopitv60", "ShopIt - Greetings");
+ 
+    // Info: HTTP status "404 Not Found" for URL: http://demoapps.microfocus.com/favicon.ico
+    WebIgnoreServerError(404, SEVERITY_INFORMATIONAL, 1);
+    WebPageAddUrl("/favicon.ico");
+    ThinkTime(4.4);
+    WebPageLink("Join the experience!", "ShopIt - New Visitor"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    ThinkTime(4.1);
+    WebVerifyHtml("Hi", 1, WEB_FLAG_IGNORE_WHITE_SPACE | WEB_FLAG_EQUAL | WEB_FLAG_CASE_SENSITIVE, NULL, SEVERITY_ERROR,
+      nVerifyHtmlResult1);
+    WebPageSubmit("Enter", ENTER001, "ShopIt - Main menu"); // Form 1
+ 
+    WebPageAddUrl("images/arrowLeftBrown.gif");
+    WebPageLink("Search", "ShopIt - Search"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    // Redirecting http://demoapps.microfocus.com/shopitv60/checkselection.asp?product=pants&Button=Submit+with+GET
+    // -> (redirection) http://demoapps.microfocus.com/shopitv60/product.asp?code=10
+    ThinkTime(3.8);
+    WebPageSubmit("Submit with GET", SUBMIT_WITH_GET002, "ShopIt - Product"); // Form 1
+ 
+    WebPageAddUrl("images/arrowLeftBrown.gif");
+    ThinkTime(2.7);
+    WebPageLink("Add to basket", "ShopIt - Basket"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    ThinkTime(2.1);
+    WebPageLink("Back to main menu", "ShopIt - Main menu (#1)"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    WebPageAddUrl("images/arrowLeftBrown.gif");
+    WebParseDataBoundEx(sSessionInfo1, STRING_COMPLETE, "name=\"", 5, "\"", WEB_FLAG_IGNORE_WHITE_SPACE | WEB_FLAG_CASE_SENSITIVE,
+      1);
+    WebPageLink("Check out", "ShopIt - Check Out"); // Link 3
+    Print("sSessionInfo1: " + sSessionInfo1);
+ 
+    WebPageParseUrl("Javascript Redirection in page kindofpayment.asp", "href=\"", "\"", WEB_FLAG_IGNORE_WHITE_SPACE);
+    ThinkTime(4.9);
+    sFormSid1 := sSessionInfo1;
+    WebPageUrl("http://demoapps.microfocus.com/shopitv60/kindofpayment.asp", "kindofpayment.asp", SHOPITV60_KINDOFPAYMENT_ASP003
+      );
+ 
+    WebPageAddUrl("images/arrowRight.gif");
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    WebPageParseUrl("Modified form action URL in page ShopIt - Pay with credit card", "action = \"", "\"", 
+      WEB_FLAG_IGNORE_WHITE_SPACE);
+    WebPageLink("Javascript Redirection in page kindofpayment.asp", "ShopIt - Pay with credit card");
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    WebPageSetActionUrl("Modified form action URL in page ShopIt - Pay with credit card");
+    ThinkTime(26.9);
+    WebPageSubmit("myForm", MYFORM004, "ShopIt - Acknowledge"); // Form 1
+ 
+    ThinkTime(3.0); 
+
+    WebPageLink("Proceed", "ShopIt - Thanks"); // Link 1
+ 
+    WebPageAddUrl("images/arrowRightBrown.gif");
+    ThinkTime(5.9);
+    WebPageUrl("http://demoapps.microfocus.com/shopitv60/fin.asp", "ShopIt - Fin");
+  end TMain;
+
+dclform
+  ENTER001:
+//     "name"                      := "osh", // changed
+    "name"                         := rRndFile1,
+    "New-Name-Button"           := "" <USE_HTML_VAL> ; // unchanged, value: "Enter"
+
+  SUBMIT_WITH_GET002:
+    "product"                   := "pants", // changed
+    "Button"                    := "" <USE_HTML_VAL> ; // unchanged, value: "Submit with GET"
+
+  SHOPITV60_KINDOFPAYMENT_ASP003:
+    "choice"                    := "CreditCard",
+    "price"                     := "39.9",
+//     "sid"                       := "92662953";
+    "sid"                       := sFormSid1;
+
+  MYFORM004:
+    "address"                   := "songpa", // changed
+    "city"                      := "Seoul", // changed
+    "state"                     := "Korea", // changed
+    "zip"                       := "" <SUPPRESS> , // suppressed, value: ""
+//     "ZipCode"                   := "111-111", // added
+    "ZipCode"                   := rRndFile2,
+    "cardtype"                  := "American Express", // added
+    "cardnumber"                := "1111111111111111", // changed
+    "expiration"                := "2022-12-12", // changed
+    "sid"                       := "" <USE_HTML_VAL> ; // hidden, unchanged, value: "92662953"
